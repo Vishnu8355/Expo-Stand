@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from 'react';
+import { AuthContext } from './Context/AuthContext';
+import { BrowserRouter as Router, Routes, Route,Navigate } from 'react-router-dom';
+import Login from './Components/Login';
+import Signup from './Components/Signup';
+import Layout from './Components/Dashboard/Layout';
+import Userprofile from './Components/Dashboard/Userprofile';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
+  const PrivateRoute = ({ element }) => {
+    const { auth } = useContext(AuthContext);
+
+    return auth.token ? element : <Navigate to="/"  />;
+};
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/layout"  element={<Layout />} />
+        <Route path="/userprofile" element={<PrivateRoute element={<Userprofile />} />} />
+      </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }
 
